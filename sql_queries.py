@@ -9,7 +9,7 @@ time_table_drop = "drop table if exists time"
 # CREATE TABLES
 songplay_table_create = """
 create table songplays (
-    songplay_id integer not null primary key,
+    songplay_id serial primary key,
     start_time bigint not null,
     user_id varchar(20) not null,
     level varchar(10) not null,
@@ -69,29 +69,40 @@ insert into songplays (
 user_table_insert = """
 insert into users (
     user_id, first_name, last_name, gender, level
-) values (%s,%s,%s,%s,%s,)
+) values (%s,%s,%s,%s,%s) 
+on conflict (user_id) do update set level = excluded.level
 """
 
 song_table_insert = """
 insert into songs (
     song_id, title, artist_id, year, duration
-) values (%s,%s,%s,%s,%s,)
+) values (%s,%s,%s,%s,%s)
+on conflict (song_id) do nothing
 """
 
 artist_table_insert = """
 insert into artists (
     artist_id, name, location, latitude, longitude
-) values (%s,%s,%s,%s,%s,)
+) values (%s,%s,%s,%s,%s)
+on conflict (artist_id) do nothing
 """
 
 time_table_insert = """
 insert into time (
     start_time, hour, day, week, month, year, weekday
-) values (%s,%s,%s,%s,%s,%s,%s,)
+) values (%s,%s,%s,%s,%s,%s,%s)
+on conflict (start_time) do nothing
 """
 
 
 # FIND SONGS
+
+select_ids = """
+select s.song_id, a.artist_id from songs s
+left join artists a
+using (artist_id)
+where title = (%s) and name = (%s)
+"""
 
 
 # QUERY LISTS

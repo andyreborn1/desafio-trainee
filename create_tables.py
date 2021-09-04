@@ -9,7 +9,7 @@ def create_database():
         user="student",
         password="student",
         host="127.0.0.1",
-        port="5433",
+        port="5432",
     )
     conn.autocommit = True
     cursor = conn.cursor()
@@ -30,7 +30,7 @@ def create_database():
         user="student",
         password="student",
         host="127.0.0.1",
-        port="5433",
+        port="5432",
     )
 
     cursor = conn.cursor()
@@ -44,7 +44,6 @@ def drop_tables(cur, conn):
         cur.execute(table)
 
     conn.commit()
-    print("tables dropped")
 
 
 def create_tables(cur, conn):
@@ -53,13 +52,11 @@ def create_tables(cur, conn):
         cur.execute(table)
 
     conn.commit()
-    print("tables created")
 
 
 def main():
 
     cursor, conn = create_database()
-    print("main")
 
     drop_tables(cursor, conn)
     create_tables(cursor, conn)
